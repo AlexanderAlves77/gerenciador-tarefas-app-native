@@ -1,11 +1,14 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { SafeAreaView } from 'react-native'
 import { defaultStyles } from '../styles/styles'
+import { Header } from '../componentes/Header'
+import { Filtros } from '../componentes/Filtros'
 
 export const HomeScreen = () => {
   return (
-    <View style={defaultStyles.container}>
-      <Text style={defaultStyles.errorMsg}>Home Gerenciador</Text>
-    </View>
+    <SafeAreaView style={[defaultStyles.container, defaultStyles.containerTop]}>
+      <Header />
+      <Filtros />
+    </SafeAreaView>
   )
 }
