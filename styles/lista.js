@@ -10,12 +10,13 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    paddingBottom: RFValue(10),
   },
   empty: {
     justifyContent: 'center',
   },
   image: {
-    width: RFValue(120),
+    width: RFValue(280),
     resizeMode: 'contain',
   },
   text: {

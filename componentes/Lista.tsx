@@ -1,24 +1,45 @@
 import React from 'react'
-import { View, Image, Text, FlatList } from 'react-native'
+import {
+  View,
+  Image,
+  Text,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native'
 import { listaStyles } from '../styles/styles'
 import { ItemLista } from './ItemLista'
+import colors from '../constants/Colors'
+import { ModalAdicaoEdicao } from './Modal'
 
 export const Lista = (props: any) => {
-  const { lista } = props
+  const { lista, refreshing, getLista, loading } = props
+
+  const [modalVisible, setModalVisible] = React.useState(false)
+  const [tarefa, setTarefa] = React.useState<any>(null)
 
   const renderItem = (obj: any) => {
     const { item } = obj
-    return <ItemLista item={item} />
+    return <ItemLista item={item} selecionarTarefa={selecionarTarefa} />
+  }
+
+  const selecionarTarefa = (tarefa: any) => {
+    setTarefa(tarefa)
+    setModalVisible(true)
   }
 
   return (
     <View
       style={[
         listaStyles.container,
-        lista === null && lista.length === 0 ? listaStyles.empty : null,
+        loading === true || (lista === null && lista.length === 0)
+          ? listaStyles.empty
+          : null,
       ]}
     >
-      {lista === null && lista.length === 0 ? (
+      {loading === true ? (
+        <ActivityIndicator color={colors.primaryColor} size="large" />
+      ) : lista === null || lista.length === 0 ? (
         <>
           <Image
             style={listaStyles.image}
@@ -29,11 +50,27 @@ export const Lista = (props: any) => {
           </Text>
         </>
       ) : (
-        <FlatList
-          data={lista}
-          keyExtractor={item => item._id}
-          renderItem={renderItem}
-        />
+        <>
+          <FlatList
+            data={lista}
+            keyExtractor={item => item._id}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl
+                colors={[colors.primaryColor, colors.mediumGreyColor]}
+                refreshing={refreshing}
+                onRefresh={getLista}
+              />
+            }
+          />
+          <ModalAdicaoEdicao
+            getLista={getLista}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            tarefa={tarefa}
+            setTarefa={setTarefa}
+          />
+        </>
       )}
     </View>
   )

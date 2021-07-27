@@ -8,6 +8,7 @@ import filtrosStyles from './filtros'
 import listaStyles from './lista'
 import footerStyles from './footer'
 import itemStyles from './itemLista'
+import modalStyles from './modal'
 
 const defaultStyles = StyleSheet.create({
   container: {
@@ -41,7 +42,6 @@ const defaultStyles = StyleSheet.create({
     minWidth: RFValue(220),
     backgroundColor: 'transparent',
     fontFamily: 'biennale-regular',
-
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
@@ -58,4 +58,5 @@ export {
   listaStyles,
   footerStyles,
   itemStyles,
+  modalStyles,
 }

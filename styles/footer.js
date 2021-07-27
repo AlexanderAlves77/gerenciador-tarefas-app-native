@@ -35,4 +35,5 @@ export default StyleSheet.create({
     paddingLeft: RFValue(20),
     alignItems: 'center',
   },
+  centeredView: {},
 })

@@ -7,15 +7,18 @@ import { Lista } from '../componentes/Lista'
 import { Footer } from '../componentes/Footer'
 import { executaRequisicao } from '../services/api'
 import { useEffect } from 'react'
+import moment from 'moment'
 
 export const HomeScreen = () => {
   // STATES DA LISTA
   const [tarefas, setTarefas] = React.useState([])
+  const [refreshing, setRefreshing] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
 
   // STATES DOS FILTROS
-  const [periodoDe, setPeriodoDe] = React.useState('')
-  const [periodoAte, setPeriodoAte] = React.useState('')
-  const [status, setStatus] = React.useState('')
+  const [periodoDe, setPeriodoDe] = React.useState(new Date())
+  const [periodoAte, setPeriodoAte] = React.useState(new Date())
+  const [status, setStatus] = React.useState(0)
 
   // STATE DE EXIBICAO DO MODAL
   const [showModal, setShowModal] = React.useState(false)
@@ -25,15 +28,18 @@ export const HomeScreen = () => {
   const [nomeTarefa, setNomeTarefa] = React.useState('')
   const [dataPrevisaoTarefa, setDataPrevisaoTarefa] = React.useState('')
 
-  const getTarefaComFiltro = async () => {
+  const getTarefasComFiltro = async () => {
     try {
-      let filtros = '?status' + status
+      setRefreshing(true)
+      setLoading(true)
+      let filtros = '?status=' + status
+
       if (periodoDe) {
-        filtros += '&periodoDe=' + periodoDe
+        filtros += '&periodoDe=' + moment(periodoDe).format('yyyy-MM-DD')
       }
 
       if (periodoAte) {
-        filtros += '&periodoAte=' + periodoAte
+        filtros += '&periodoAte=' + moment(periodoAte).format('yyyy-MM-DD')
       }
 
       const resultado = await executaRequisicao('tarefa' + filtros, 'get')
@@ -43,18 +49,34 @@ export const HomeScreen = () => {
     } catch (error) {
       console.log(error)
     }
+    setRefreshing(false)
+    setLoading(false)
   }
 
   useEffect(() => {
-    getTarefaComFiltro()
+    getTarefasComFiltro()
   }, [status, periodoDe, periodoAte])
 
   return (
     <SafeAreaView style={[defaultStyles.container, defaultStyles.containerTop]}>
       <Header />
-      <Filtros />
-      <Lista lista={tarefas} />
-      <Footer />
+      <Filtros
+        status={status}
+        setStatus={setStatus}
+        periodoDe={periodoDe}
+        setPeriodoDe={setPeriodoDe}
+        periodoAte={periodoAte}
+        setPeriodoAte={setPeriodoAte}
+      />
+
+      <Lista
+        lista={tarefas}
+        refreshing={refreshing}
+        getLista={getTarefasComFiltro}
+        loading={loading}
+      />
+
+      <Footer getLista={getTarefasComFiltro} />
     </SafeAreaView>
   )
 }

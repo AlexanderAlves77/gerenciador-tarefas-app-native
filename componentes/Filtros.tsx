@@ -6,12 +6,18 @@ import { Picker } from '@react-native-picker/picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
 
-export const Filtros = () => {
+export const Filtros = (props: any) => {
+  const {
+    status,
+    setStatus,
+    periodoDe,
+    setPeriodoDe,
+    periodoAte,
+    setPeriodoAte,
+  } = props
+
   const [showFiltros, setShowFiltros] = useState(false)
-  const [status, setStatus] = useState(0)
-  const [periodoDe, setPeriodoDe] = useState<Date>(new Date())
   const [showPeriodoDe, setShowPeriodoDe] = useState(false)
-  const [periodoAte, setPeriodoAte] = useState<Date>(new Date())
   const [showPeriodoAte, setShowPeriodoAte] = useState(false)
 
   return (
